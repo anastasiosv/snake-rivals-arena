@@ -37,34 +37,32 @@ const App = () => {
     setUser(null);
   };
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-foreground font-display text-xl">Loading...</div>
-      </div>
-    );
-  }
-
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <Toaster />
-        <Sonner />
         <BrowserRouter>
-          <div className="min-h-screen bg-background">
-            <Header user={user} onLogout={handleLogout} />
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/game" element={<Game />} />
-              <Route path="/leaderboard" element={<Leaderboard />} />
-              <Route path="/spectate" element={<Spectate />} />
-              <Route
-                path="/auth"
-                element={user ? <Navigate to="/" replace /> : <Auth onLogin={handleLogin} />}
-              />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </div>
+          <Toaster />
+          <Sonner />
+          {isLoading ? (
+            <div className="min-h-screen bg-background flex items-center justify-center">
+              <div className="text-foreground font-display text-xl">Loading...</div>
+            </div>
+          ) : (
+            <div className="min-h-screen bg-background">
+              <Header user={user} onLogout={handleLogout} />
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/game" element={<Game />} />
+                <Route path="/leaderboard" element={<Leaderboard />} />
+                <Route path="/spectate" element={<Spectate />} />
+                <Route
+                  path="/auth"
+                  element={user ? <Navigate to="/" replace /> : <Auth onLogin={handleLogin} />}
+                />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </div>
+          )}
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>
