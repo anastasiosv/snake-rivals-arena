@@ -19,12 +19,12 @@ services:
     networks:
       - snake-network
 
-  # FastAPI Backend
-  backend:
+  # Unified App (Frontend + Backend)
+  app:
     build:
-      context: ./backend
+      context: .
       dockerfile: Dockerfile
-    container_name: snake-arena-backend
+    container_name: snake-arena-app
     environment:
       DATABASE_URL: postgresql://snakearena:snakearena_password@postgres:5432/snake_arena
       SQLALCHEMY_ECHO: "False"
@@ -35,20 +35,6 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    ports:
-      - "8000:8000"
-    networks:
-      - snake-network
-    restart: unless-stopped
-
-  # Nginx Frontend
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    container_name: snake-arena-frontend
-    depends_on:
-      - backend
     ports:
       - "80:80"
     networks:

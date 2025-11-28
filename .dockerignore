@@ -1,0 +1,43 @@
+# Git
+.git/
+.gitignore
+
+# Node modules
+node_modules/
+frontend/node_modules/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+backend/.venv/
+*.db
+*.sqlite
+
+# Build outputs
+frontend/dist/
+frontend/build/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+.env.docker
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Testing
+.pytest_cache/
+coverage/
+
+# Documentation
+*.md
+!README.md
+
+# Logs
+*.log

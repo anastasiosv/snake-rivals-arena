@@ -1,0 +1,84 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  # ------------------------------------------------------------------
+  # JOB 1: Backend Tests
+  # ------------------------------------------------------------------
+  test-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v1
+
+      - name: Install dependencies
+        working-directory: ./backend
+        run: uv sync --frozen --no-dev
+
+      - name: Run Backend Tests
+        working-directory: ./backend
+        # Install pytest explicitly if not in main dependencies
+        run: |
+          uv run pytest tests -v
+
+  # ------------------------------------------------------------------
+  # JOB 2: Frontend Tests / Build Check
+  # ------------------------------------------------------------------
+  test-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ./frontend
+        run: npm ci
+
+      # Run tests if available, otherwise just verify build
+      - name: Run Frontend Tests
+        working-directory: ./frontend
+        run: npm test -- --run
+
+      - name: Verify Build
+        working-directory: ./frontend
+        run: npm run build
+        env:
+          VITE_API_URL: /api
+
+  # ------------------------------------------------------------------
+  # JOB 3: Deploy to Render
+  # ------------------------------------------------------------------
+  deploy:
+    needs: [test-backend, test-frontend]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Render Deployment
+        # Only runs if RENDER_DEPLOY_HOOK_URL secret is set
+        if: "${{ secrets.RENDER_DEPLOY_HOOK_URL != '' }}"
+        run: |
+          curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+          echo "Deployment triggered!"
+      
+      - name: Check for Secret
+        if: "${{ secrets.RENDER_DEPLOY_HOOK_URL == '' }}"
+        run: |
+          echo "::warning::RENDER_DEPLOY_HOOK_URL secret is missing. Deployment skipped."
