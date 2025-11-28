@@ -70,15 +70,17 @@ jobs:
     needs: [test-backend, test-frontend]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
+    env:
+      RENDER_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
     steps:
       - name: Trigger Render Deployment
-        # Only runs if RENDER_DEPLOY_HOOK_URL secret is set
-        if: "${{ secrets.RENDER_DEPLOY_HOOK_URL != '' }}"
+        # Check env var instead of secrets context directly
+        if: env.RENDER_HOOK != ''
         run: |
-          curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+          curl -X POST $RENDER_HOOK
           echo "Deployment triggered!"
       
       - name: Check for Secret
-        if: "${{ secrets.RENDER_DEPLOY_HOOK_URL == '' }}"
+        if: env.RENDER_HOOK == ''
         run: |
           echo "::warning::RENDER_DEPLOY_HOOK_URL secret is missing. Deployment skipped."
