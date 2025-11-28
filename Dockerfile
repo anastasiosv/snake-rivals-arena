@@ -66,8 +66,8 @@ RUN chmod +x /entrypoint-unified.sh
 ENV PATH="/app/backend/.venv/bin:$PATH"
 ENV PYTHONUNBUFFERED=1
 
-# Expose port 80
-EXPOSE 80
+# Expose port 8080
+EXPOSE 8080
 
 # Use unified entrypoint
 ENTRYPOINT ["/entrypoint-unified.sh"]

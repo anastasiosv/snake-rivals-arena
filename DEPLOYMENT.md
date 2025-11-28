@@ -107,7 +107,7 @@ Railway is another excellent option.
 1.  Click on your **App Service** card.
 2.  Go to **"Variables"**.
 3.  Add `DATABASE_URL` = `${{Postgres.DATABASE_URL}}`.
-4.  Add `PORT` = `80`.
+4.  Add `PORT` = `8080`.
 
 ### 4. Verify
 Railway will redeploy and provide a public URL.
