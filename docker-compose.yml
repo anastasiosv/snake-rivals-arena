@@ -1,0 +1,64 @@
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: snake-arena-postgres
+    environment:
+      POSTGRES_USER: snakearena
+      POSTGRES_PASSWORD: snakearena_password
+      POSTGRES_DB: snake_arena
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U snakearena -d snake_arena"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - snake-network
+
+  # FastAPI Backend
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: snake-arena-backend
+    environment:
+      DATABASE_URL: postgresql://snakearena:snakearena_password@postgres:5432/snake_arena
+      SQLALCHEMY_ECHO: "False"
+      POSTGRES_HOST: postgres
+      POSTGRES_USER: snakearena
+      POSTGRES_PASSWORD: snakearena_password
+      POSTGRES_DB: snake_arena
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    networks:
+      - snake-network
+    restart: unless-stopped
+
+  # Nginx Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: snake-arena-frontend
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+    networks:
+      - snake-network
+    restart: unless-stopped
+
+networks:
+  snake-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local

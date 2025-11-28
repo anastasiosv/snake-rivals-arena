@@ -1,73 +1,60 @@
-# Welcome to your Lovable project
+# Snake Rivals Arena
 
-## Project info
+A multiplayer snake game with real-time spectating and leaderboards.
 
-**URL**: https://lovable.dev/projects/a02ef045-f208-493b-a0dc-6d768172c4c7
+## 🐳 Docker Quick Start (Recommended)
 
-## How can I edit this code?
+Run the entire application with Docker Compose:
 
-There are several ways of editing your application.
+```bash
+docker-compose up --build
+```
 
-**Use Lovable**
+Visit **http://localhost** to play the game!
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/a02ef045-f208-493b-a0dc-6d768172c4c7) and start prompting.
+For detailed Docker instructions, see [DOCKER.md](DOCKER.md).
 
-Changes made via Lovable will be committed automatically to this repo.
+## 💻 Local Development
 
-**Use your preferred IDE**
+Run both frontend and backend servers:
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+```bash
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+This will start:
+- Backend API on `http://localhost:3000`
+- Frontend on `http://localhost:8080` (or `http://localhost:5173`)
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Individual Commands
 
-**Use GitHub Codespaces**
+```bash
+# Backend only
+npm run dev:backend
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+# Frontend only
+npm run dev:frontend
+```
 
-## What technologies are used for this project?
+## 📁 Project Structure
 
-This project is built with:
+- `frontend/` - React + TypeScript frontend with Vite
+- `backend/` - FastAPI backend with Python
+- `openapi.yaml` - API specification
+- `docker-compose.yml` - Docker Compose configuration
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## 📚 Documentation
 
-## How can I deploy this project?
+- **[Docker Setup](DOCKER.md)** - Complete Docker Compose guide
+- [Backend README](backend/README.md) - Backend development guide
+- [Frontend README](frontend/README.md) - Frontend development guide
+- [API Documentation](http://localhost:3000/docs) - Swagger UI (when backend is running)
 
-Simply open [Lovable](https://lovable.dev/projects/a02ef045-f208-493b-a0dc-6d768172c4c7) and click on Share -> Publish.
+## 🎮 Features
 
-## Can I connect a custom domain to my Lovable project?
+- **Multiplayer Snake Game** - Classic snake with modern twist
+- **Real-time Spectating** - Watch live games
+- **Leaderboards** - Compete for high scores
+- **User Authentication** - Secure login and signup
+- **PostgreSQL Database** - Production-ready data persistence
 
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
