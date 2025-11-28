@@ -1,5 +1,5 @@
 services:
-  # Unified Web Service (Backend + Frontend)
+  # Snake Rivals Arena - Unified Web Service (Backend + Frontend)
   - type: web
     name: snake-rivals-arena
     runtime: docker
